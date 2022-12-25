@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/0d0a5eddb4.js" crossorigin="anonymous"></script>
+    <script src="js/app.js" defer></script>
+    <title>Document</title>
+</head>
+<body>
+    <input type="file" id="myfile" name="myfile" ></input>
+    <article class="main-article" id="main-article">
+        
+    </article>
+    <div class="controller">
+        <i class="fa-solid fa-download system-icon" onclick="download()"></i>
+        <i class="fa-solid fa-upload system-icon" onclick="upload()"></i>
+        <!-- select tag to be inserted -->
+        <label for="tags">Choose a type:</label>
+        <select name="tags" id="tag-selector">
+            <option value="text">Text</option>
+            <option value="image">Image</option>
+            <option value="embed">Embed</option>
+            <option value="list">List</option>
+        </select>
+        <!-- text type -->
+        <div class="controls text-control">
+            <textarea id="text-input-box" placeholder="Enter text here" ></textarea>
+            <!-- select design type -->
+            <label for="styles">Choose a style:</label>
+            <select name="styles" id="styles">
+                <option value="h1">H1</option>
+                <option value="h2">H2</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="h5">H5</option>
+                <option value="h6">H6</option>
+                <option value="p">paragraph(p)</option>
+                <option value="label">Label</option>
+            </select>
+            <div class="custom-css-container">
+                <div>
+                    <label for="css-styles">Choose a style:</label>
+                    <select name="css-styles" id="css-styles">
+                        <option value="font-family">font-family</option>
+                        <option value="font-weight">font-weight</option>
+                        <option value="font-size">font-size</option>
+                        <option value="color">color</option>
+                        <option value="border">border</option>
+                        <option value="margin-left">margin-left</option>
+                        <option value="margin-right">margin-right</option>
+                        <option value="margin-top">margin-top</option>
+                        <option value="margin-bottom">margin-bottom</option>
+                        <option value="margin">margin</option>
+                        <option value="padding-left">padding-left</option>
+                        <option value="padding-right">padding-right</option>
+                        <option value="padding-top">padding-top</option>
+                        <option value="padding-bottom">padding-bottom</option>
+                        <option value="padding">padding</option>
+                    </select>
+                    <button onclick="addStyle()">Add Style</button>
+                </div>
+                <div class="custom-css-styles-container" id="custom-css-styles-container">
+                    
+                </div>
+            </div>
+            <button onclick="placeText()" id="place-text-button" data-update="0">Place Text</button>
+            <button id="Cancel" onclick="cancelUpdate()">Cancel</button>
+        </div>
+        <div class="element-grid-controller">
+            <button id="grid-control-button" data-grid-on="1" onclick="toggleGrid()">Turn off grid</button>
+            
+        </div>
+    </div>
+</body>
+</html>
