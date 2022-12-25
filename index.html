@@ -15,19 +15,21 @@
     <article class="main-article" id="main-article">
         
     </article>
-    <div class="controller">
+    <div class="controller" id="controller">
         <i class="fa-solid fa-download system-icon" onclick="download()"></i>
         <i class="fa-solid fa-upload system-icon" onclick="upload()"></i>
         <!-- select tag to be inserted -->
         <label for="tags">Choose a type:</label>
-        <select name="tags" id="tag-selector">
+        <select name="tags" id="tag-selector" onchange="updateLayout()">
             <option value="text">Text</option>
             <option value="image">Image</option>
             <option value="embed">Embed</option>
             <option value="list">List</option>
         </select>
+
+
         <!-- text type -->
-        <div class="controls text-control">
+        <div class="controls text-control" id="text-type-style-control">
             <textarea id="text-input-box" placeholder="Enter text here" ></textarea>
             <!-- select design type -->
             <label for="styles">Choose a style:</label>
@@ -41,10 +43,11 @@
                 <option value="p">paragraph(p)</option>
                 <option value="label">Label</option>
             </select>
+            <!-- custom css container -->
             <div class="custom-css-container">
                 <div>
                     <label for="css-styles">Choose a style:</label>
-                    <select name="css-styles" id="css-styles">
+                    <select name="css-styles" id="text-css-styles">
                         <option value="font-family">font-family</option>
                         <option value="font-weight">font-weight</option>
                         <option value="font-size">font-size</option>
@@ -63,13 +66,53 @@
                     </select>
                     <button onclick="addStyle()">Add Style</button>
                 </div>
-                <div class="custom-css-styles-container" id="custom-css-styles-container">
-                    
-                </div>
             </div>
             <button onclick="placeText()" id="place-text-button" data-update="0">Place Text</button>
             <button id="Cancel" onclick="cancelUpdate()">Cancel</button>
         </div>
+
+
+
+        <!-- image type -->
+        <div class="controls image-control" id="image-type-style-control">
+            <input placeholder="image url" class="image-input" id="image-input">
+            <label class="file-choose">Choose a file</label>
+            <input type="file" class="local-file-chooser">
+            <div class="custom-css-container">
+                <div>
+                    <label for="css-styles">Choose a style:</label>
+                    <select name="css-styles" id="image-css-styles">
+                        <option value="width">width</option>
+                        <option value="height">height</option>
+                        <option value="object-fit">object-fit</option>
+                        <option value="opacity">opacity</option>
+                        <option value="border">border</option>
+                        <option value="border-radius">border-radius</option>
+                        <option value="margin-left">margin-left</option>
+                        <option value="margin-right">margin-right</option>
+                        <option value="margin-top">margin-top</option>
+                        <option value="margin-bottom">margin-bottom</option>
+                        <option value="margin">margin</option>
+                        <option value="padding-left">padding-left</option>
+                        <option value="padding-right">padding-right</option>
+                        <option value="padding-top">padding-top</option>
+                        <option value="padding-bottom">padding-bottom</option>
+                        <option value="padding">padding</option>
+                    </select>
+                    <button onclick="addStyle()">Add Style</button>
+                </div>
+            </div>
+            
+            <button onclick="placeImage()" id="place-image-button" data-update="0">Place Image</button>
+            <button id="cancel-image-update" onclick="cancelUpdate()">Cancel</button>
+        </div>
+        <div class="custom-css-styles-container" id="custom-css-styles-container">
+                    
+        </div>
+
+
+
+
         <div class="element-grid-controller">
             <button id="grid-control-button" data-grid-on="1" onclick="toggleGrid()">Turn off grid</button>
             

@@ -1,10 +1,20 @@
 *{
     font-family: 'Space Grotesk', sans-serif;
+    box-sizing: border-box;
+    margin:0px;
+    padding: 0px;
 }
 body{
     display: flex;
     flex-direction: row;
     justify-content: center;
+    box-sizing: border-box;
+    margin:0px;
+    padding: 0px;
+    padding-top: 30px;
+}
+.common-style{
+    display:block;
 }
 .main-article{
     width: 50%;
@@ -36,6 +46,9 @@ body{
 }
 .controls{
     margin-top: 30px;
+}
+#text-type-style-control{
+    display: block;
 }
 .text-control textarea{
     width: 100%;
@@ -81,5 +94,33 @@ body{
     cursor: pointer;
 }
 #myfile{
+    display: none;
+}
+
+/* image */
+.image-input{
+    display: block;
+    width: 90%;
+    height:40px;
+    font-family: 'Space Grotesk', sans-serif;
+    padding-left: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+.file-choose{
+    display: block;
+    margin-bottom: 10px;
+}
+.local-file-chooser{
+    margin-bottom: 15px;
+}
+.image-default{
+    width: 100%;
+    height: auto;
+}
+#place-image-button{
+    margin-top: 15px;
+}
+#cancel-image-update{
     display: none;
 }
