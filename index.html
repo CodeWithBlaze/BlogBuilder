@@ -23,6 +23,7 @@
         <select name="tags" id="tag-selector" onchange="updateLayout()">
             <option value="text">Text</option>
             <option value="image">Image</option>
+            <option value="link">Link</option>
             <option value="embed">Embed</option>
             <option value="list">List</option>
         </select>
@@ -49,6 +50,7 @@
                     <label for="css-styles">Choose a style:</label>
                     <select name="css-styles" id="text-css-styles">
                         <option value="font-family">font-family</option>
+                        <option value="font-style">font-style</option>
                         <option value="font-weight">font-weight</option>
                         <option value="font-size">font-size</option>
                         <option value="color">color</option>
@@ -68,7 +70,7 @@
                 </div>
             </div>
             <button onclick="placeText()" id="place-text-button" data-update="0">Place Text</button>
-            <button id="Cancel" onclick="cancelUpdate()">Cancel</button>
+            <button id="cancel-text-update" onclick="cancelUpdate()">Cancel</button>
         </div>
 
 
@@ -106,10 +108,56 @@
             <button onclick="placeImage()" id="place-image-button" data-update="0">Place Image</button>
             <button id="cancel-image-update" onclick="cancelUpdate()">Cancel</button>
         </div>
+
+
+
+
+        <!-- link type -->
+        <div class="controls link-control" id="link-type-style-control">
+            <input placeholder="Enter text here" class="link-input" id="link-input">
+            <input placeholder="Enter destination link" class="link-input" id="destination-input">
+            
+            <div class="custom-css-container">
+                <div>
+                    <label for="css-styles">Choose a style:</label>
+                    <select name="css-styles" id="link-css-styles">
+                        <option value="font-family">font-family</option>
+                        <option value="font-style">font-style</option>
+                        <option value="text-decoration">text-decoration</option>
+                        <option value="font-weight">font-weight</option>
+                        <option value="font-size">font-size</option>
+                        <option value="color">color</option>
+                        <option value="border">border</option>
+                        <option value="margin-left">margin-left</option>
+                        <option value="margin-right">margin-right</option>
+                        <option value="margin-top">margin-top</option>
+                        <option value="margin-bottom">margin-bottom</option>
+                        <option value="margin">margin</option>
+                        <option value="padding-left">padding-left</option>
+                        <option value="padding-right">padding-right</option>
+                        <option value="padding-top">padding-top</option>
+                        <option value="padding-bottom">padding-bottom</option>
+                        <option value="padding">padding</option>
+                    </select>
+                    <button onclick="addStyle()">Add Style</button>
+                </div>
+            </div>
+            
+            <button onclick="placeLink()" id="place-link-button" data-update="0">Place Link</button>
+            <button id="cancel-link-update" onclick="cancelUpdate()">Cancel</button>
+        </div>
+
+
+
+
+
         <div class="custom-css-styles-container" id="custom-css-styles-container">
                     
         </div>
-
+        <div class="position-controller" id="position-controller">
+            <div class="control-button" onclick="pullDown()"><i class="fa-solid fa-down-long"></i></div>
+            <div class="control-button" onclick="pushUp()"><i class="fa-solid fa-up-long"></i></div>
+        </div>
 
 
 

@@ -25,6 +25,31 @@ function upload(){
     getElementById('myfile').click()
     
 }
+function removeStyle(id){
+    const element = document.getElementById(id);
+    element.parentNode.removeChild(element);
+}
+//show pull down and push up button
+function showPullDownAndPushUp(){
+    const display = window.getComputedStyle(getElementById('position-controller')).display;
+    getElementById('position-controller').style.display = display === 'none'?'flex':'none';
+}
+//push up an element
+function pushUp(){
+    // getElementById('place-image-button').setAttribute('data-update',id)
+    const updateElement = getElementById(`place-${getElementById('tag-selector').value}-button`)
+    const id = updateElement.getAttribute('data-update') 
+    const NodeList = getElementById('main-article').querySelectorAll('*')
+    let i;
+    for(i in NodeList)
+        if(NodeList[i].id === id) break;
+
+    if(i!=0){
+        const nodeToBeReplaced = NodeList[i];
+        const previousNode = NodeList[i-1];
+        getElementById('main-article').insertBefore(nodeToBeReplaced,previousNode)
+    }
+}
 //get elements by id
 function getElementById(id){
     return document.getElementById(id)
@@ -70,10 +95,10 @@ function addStyle(property=null,value=null,_id=null){
     const selectedStyle = property ? property : getElementById(getElementById('tag-selector').value +'-css-styles').value;
     const id = _id ? _id : getUniqueId()
     const styleJS = 
-    `<div class="custom-css-styles" id="${id}">
+    `<div class="custom-css-styles" id="style-container-${id}">
         <p id="property-${id}">${selectedStyle}</p>
         <input id="value-${id}" placeholder="value" value="${value?value:''}"/>
-        <i class="fa-solid fa-trash" id="trash-${id}"></i>
+        <i class="fa-solid fa-trash" id="trash-${id}" onclick="removeStyle('style-container-${id}')"></i>
     </div>`;
     const container = getElementById('custom-css-styles-container')
     container.innerHTML += styleJS;
@@ -108,7 +133,9 @@ function placeText(){
     //check for custom css
     const cssList = getElementById('custom-css-styles-container').querySelectorAll("div")
     cssList.forEach(item=>{
-        const id = item.getAttribute('id')
+        // style-container-
+        const _id = item.getAttribute('id')
+        const id = _id.substring(_id.lastIndexOf('-')+1)
         const property = getElementById(`property-${id}`).innerText
         const value = getElementById(`value-${id}`).value
         node.style[property] = value.toString();
@@ -120,11 +147,16 @@ function placeText(){
         replaceNode(node)
     //clear the css container
     getElementById('custom-css-styles-container').innerHTML = ""
+    //access the containers
+    getElementById('text-input-box').value = ''
+    getElementById('styles').value = 'h1' 
 }
 function updateText(id){
     //switch Layout
     getElementById('tag-selector').value = 'text';
     updateLayout()
+    //show position controller
+    showPullDownAndPushUp()
     //show update button
     getElementById('place-text-button').innerText = 'Update';
     getElementById('place-text-button').setAttribute('data-update',id)
@@ -138,7 +170,7 @@ function updateText(id){
     const tagType = element.tagName.toLowerCase()
     getElementById('styles').value = tagType 
     // place the values
-    const textStyles = ['font-family','font-weight','font-size','color','border','margin',
+    const textStyles = ['font-family','font-weight','font-size','font-style','color','border','margin',
     'margin-left','margin-right','margin-top','margin-bottom','padding','padding-left',
     'padding-right','padding-top','padding-bottom' ]
     textStyles.forEach(property=>{
@@ -146,28 +178,30 @@ function updateText(id){
             addStyle(property,element.style[property],element.getAttribute('id'))
     })
     // show the update button
-    getElementById('Cancel').style.display = 'inline';
+    getElementById('cancel-text-update').style.display = 'inline';
+    
+    
 }
 function replaceNode(new_node){
     const selectedStyle = getElementById('tag-selector').value;
     const id = getElementById(`place-${selectedStyle}-button`).getAttribute('data-update');
     const container = getElementById('main-article')
     const old_node = getElementById(id)
-    // console.log("old node",old_node)
-    // console.log("new_node",new_node)
     container.replaceChild(new_node,old_node)
+    showPullDownAndPushUp()
     cancelUpdate()
 }
 function cancelUpdate(){
-    getElementById('place-text-button').innerText = 'Place Text';
-    getElementById('place-text-button').setAttribute('data-update','0')
-    getElementById('Cancel').style.display = 'none';
+    //show position controller
+    showPullDownAndPushUp()
+    const selectedStyle = getElementById('tag-selector').value;
+    const element = getElementById(`place-${selectedStyle.charAt(0)+selectedStyle.substring(1)}-button`)
+    element.innerText = `Place ${selectedStyle}`;
+    element.setAttribute('data-update','0')
+    getElementById(`cancel-${selectedStyle.toLowerCase()}-update`).style.display = 'none';
 
     //clear the css
     getElementById('custom-css-styles-container').innerHTML = ""
-    //access the containers
-    getElementById('text-input-box').value = ''
-    getElementById('styles').value = 'h1' 
 }
 // --------------------------------------------------------------------------------------------
 
@@ -185,8 +219,7 @@ function placeImage(){
     const node = createElement('img')
     //add a unique id to it
     node.setAttribute('id',getUniqueId())
-    node.setAttribute('class','article-element')
-    node.setAttribute('class','image-default')
+    node.setAttribute('class','article-element image-default')
     node.src = imageURL
     node.onclick = ()=>updateImage(node.id);
     //add css
@@ -209,6 +242,8 @@ function updateImage(id){
     //switch Layout
     getElementById('tag-selector').value = 'image';
     updateLayout()
+    //show position controller
+    showPullDownAndPushUp()
     //show update button
     getElementById('place-image-button').innerText = 'Update';
     getElementById('place-image-button').setAttribute('data-update',id)
@@ -220,13 +255,80 @@ function updateImage(id){
     //access the containers
     getElementById('image-input').value = element.src
     // place the values
-    const textStyles = ['width','height','object-fit','opacity','border','border-radius',
+    const ImageStyles = ['width','height','object-fit','opacity','border','border-radius',
     'margin','margin-left','margin-right','margin-top','margin-bottom','padding',
     'padding-left','padding-right','padding-top','padding-bottom' ]
+    ImageStyles.forEach(property=>{
+        if(element.style[property])
+            addStyle(property,element.style[property],element.getAttribute('id'))
+    })
+    // show the update button
+    getElementById('cancel-image-update').style.display = 'inline';
+}
+// --------------------------------------------------------------------------------------------
+
+
+
+// --------------------------------------------------------------------------------------------
+// link section
+function placeLink(){
+    const linkText  = getElementById('link-input').value
+    const destination  = getElementById('destination-input').value
+    if(linkText === '' || destination === '' || !destination.startsWith('https://')){
+        alert("Fields cannot be empty or has no https")
+        return;
+    }
+    //create the type
+    const node = createElement('a')
+    //add a unique id to it
+    node.setAttribute('id',getUniqueId())
+    node.setAttribute('class','article-element common-style')
+    
+    node.href = destination
+    node.innerText = linkText
+    node.target = '_blank'
+    node.onclick = ()=>updateLink(node.id);
+    //add css
+    const cssList = getElementById('custom-css-styles-container').querySelectorAll("div")
+    cssList.forEach(item=>{
+        const id = item.getAttribute('id')
+        const property = getElementById(`property-${id}`).innerText
+        const value = getElementById(`value-${id}`).value
+        node.style[property] = value.toString();
+    })
+    //add the type to the editor
+    if(getElementById('place-link-button').getAttribute('data-update') === '0')
+        addToArticle(node)
+    else
+        replaceNode(node)
+    //clear the css container
+    getElementById('custom-css-styles-container').innerHTML = ""
+}
+function updateLink(id){
+    //switch Layout
+    getElementById('tag-selector').value = 'link';
+    updateLayout()
+    //show position controller
+    showPullDownAndPushUp()
+    //show update button
+    getElementById('place-link-button').innerText = 'Update';
+    getElementById('place-link-button').setAttribute('data-update',id)
+
+    //clear the css
+    getElementById('custom-css-styles-container').innerHTML = ""
+    // access the element
+    const element = getElementById(id)
+    //access the containers
+    getElementById('link-input').value = element.innerText
+    getElementById('destination-input').value = element.href
+    // place the values
+    const textStyles = ['font-family','font-weight','font-size','color','border','margin',
+    'margin-left','margin-right','margin-top','margin-bottom','padding','padding-left',
+    'padding-right','padding-top','padding-bottom','text-decoration','font-style' ]
     textStyles.forEach(property=>{
         if(element.style[property])
             addStyle(property,element.style[property],element.getAttribute('id'))
     })
     // show the update button
-    getElementById('cancel-image-upadte').style.display = 'inline';
+    getElementById('cancel-link-update').style.display = 'inline';
 }
