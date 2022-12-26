@@ -15,6 +15,7 @@ body{
 }
 .common-style{
     display:block;
+    margin-top: 10px;
 }
 .position-controller{
     display: flex;

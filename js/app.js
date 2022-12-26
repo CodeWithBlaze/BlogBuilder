@@ -225,7 +225,8 @@ function placeImage(){
     //add css
     const cssList = getElementById('custom-css-styles-container').querySelectorAll("div")
     cssList.forEach(item=>{
-        const id = item.getAttribute('id')
+        const _id = item.getAttribute('id')
+        const id = _id.substring(_id.lastIndexOf('-')+1)
         const property = getElementById(`property-${id}`).innerText
         const value = getElementById(`value-${id}`).value
         node.style[property] = value.toString();
@@ -291,7 +292,8 @@ function placeLink(){
     //add css
     const cssList = getElementById('custom-css-styles-container').querySelectorAll("div")
     cssList.forEach(item=>{
-        const id = item.getAttribute('id')
+        const _id = item.getAttribute('id')
+        const id = _id.substring(_id.lastIndexOf('-')+1)
         const property = getElementById(`property-${id}`).innerText
         const value = getElementById(`value-${id}`).value
         node.style[property] = value.toString();
