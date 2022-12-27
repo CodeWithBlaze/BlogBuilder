@@ -30,13 +30,11 @@ function removeStyle(id){
     element.parentNode.removeChild(element);
 }
 //show pull down and push up button
-function showPullDownAndPushUp(){
-    const display = window.getComputedStyle(getElementById('position-controller')).display;
-    getElementById('position-controller').style.display = display === 'none'?'flex':'none';
+function showPullDownAndPushUp(toBeShown){
+   getElementById('position-controller').style.display = toBeShown?'flex':'none';
 }
 //push up an element
 function pushUp(){
-    // getElementById('place-image-button').setAttribute('data-update',id)
     const updateElement = getElementById(`place-${getElementById('tag-selector').value}-button`)
     const id = updateElement.getAttribute('data-update') 
     const NodeList = getElementById('main-article').querySelectorAll('*')
@@ -47,6 +45,20 @@ function pushUp(){
     if(i!=0){
         const nodeToBeReplaced = NodeList[i];
         const previousNode = NodeList[i-1];
+        getElementById('main-article').insertBefore(nodeToBeReplaced,previousNode)
+    }
+}
+function pullDown(){
+    const updateElement = getElementById(`place-${getElementById('tag-selector').value}-button`)
+    const id = updateElement.getAttribute('data-update') 
+    const NodeList = getElementById('main-article').querySelectorAll('*')
+    let i;
+    for(i in NodeList)
+        if(NodeList[i].id === id) break;
+
+    if(i!=NodeList.length - 1){
+        const nodeToBeReplaced = NodeList[parseInt(i) + 1];
+        const previousNode = NodeList[i];
         getElementById('main-article').insertBefore(nodeToBeReplaced,previousNode)
     }
 }
@@ -80,12 +92,19 @@ function toggleGrid(){
     const gridStatus = gridButton.getAttribute('data-grid-on')
     const nodeList = getElementById('main-article').querySelectorAll("*")
     if(gridStatus == '1'){
-        nodeList.forEach(node=>node.classList.add('article-element-no-border'))
+        nodeList.forEach(node=>{
+            node.classList.add('article-element-no-border')
+            node.classList.remove('embed-dev-pad')
+        })
         gridButton.setAttribute('data-grid-on','0');
         gridButton.innerText = "Turn on grid"
     }
     else{
-        nodeList.forEach(node=>node.classList.remove('article-element-no-border'))
+        nodeList.forEach(node=>{
+            node.classList.remove('article-element-no-border')
+            if(node.tagName === 'IFRAME')
+                node.classList.add('embed-dev-pad')
+        })
         gridButton.setAttribute('data-grid-on','1');
         gridButton.innerText = "Turn off grid"
     }
@@ -149,14 +168,15 @@ function placeText(){
     getElementById('custom-css-styles-container').innerHTML = ""
     //access the containers
     getElementById('text-input-box').value = ''
-    getElementById('styles').value = 'h1' 
+    getElementById('styles').value = 'h1'
+    showPullDownAndPushUp(false) 
 }
 function updateText(id){
     //switch Layout
     getElementById('tag-selector').value = 'text';
     updateLayout()
     //show position controller
-    showPullDownAndPushUp()
+    showPullDownAndPushUp(true)
     //show update button
     getElementById('place-text-button').innerText = 'Update';
     getElementById('place-text-button').setAttribute('data-update',id)
@@ -188,12 +208,11 @@ function replaceNode(new_node){
     const container = getElementById('main-article')
     const old_node = getElementById(id)
     container.replaceChild(new_node,old_node)
-    showPullDownAndPushUp()
     cancelUpdate()
 }
 function cancelUpdate(){
     //show position controller
-    showPullDownAndPushUp()
+    showPullDownAndPushUp(false)
     const selectedStyle = getElementById('tag-selector').value;
     const element = getElementById(`place-${selectedStyle.charAt(0)+selectedStyle.substring(1)}-button`)
     element.innerText = `Place ${selectedStyle}`;
@@ -210,6 +229,7 @@ function cancelUpdate(){
 // --------------------------------------------------------------------------------------------
 // image section
 function placeImage(){
+    
     const imageURL  = getElementById('image-input').value
     if(imageURL === '' || !imageURL.startsWith('https://')){
         alert("Image url cannot be empty or has no https")
@@ -238,13 +258,15 @@ function placeImage(){
         replaceNode(node)
     //clear the css container
     getElementById('custom-css-styles-container').innerHTML = ""
+    showPullDownAndPushUp(false) 
+
 }
 function updateImage(id){
     //switch Layout
     getElementById('tag-selector').value = 'image';
     updateLayout()
     //show position controller
-    showPullDownAndPushUp()
+    showPullDownAndPushUp(true)
     //show update button
     getElementById('place-image-button').innerText = 'Update';
     getElementById('place-image-button').setAttribute('data-update',id)
@@ -265,6 +287,7 @@ function updateImage(id){
     })
     // show the update button
     getElementById('cancel-image-update').style.display = 'inline';
+    
 }
 // --------------------------------------------------------------------------------------------
 
@@ -305,13 +328,14 @@ function placeLink(){
         replaceNode(node)
     //clear the css container
     getElementById('custom-css-styles-container').innerHTML = ""
+    showPullDownAndPushUp(false) 
 }
 function updateLink(id){
     //switch Layout
     getElementById('tag-selector').value = 'link';
     updateLayout()
     //show position controller
-    showPullDownAndPushUp()
+    showPullDownAndPushUp(true)
     //show update button
     getElementById('place-link-button').innerText = 'Update';
     getElementById('place-link-button').setAttribute('data-update',id)
@@ -333,4 +357,70 @@ function updateLink(id){
     })
     // show the update button
     getElementById('cancel-link-update').style.display = 'inline';
+}
+
+
+// embeding section
+function placeEmbed(){
+    let embedSrc  = getElementById('embed-input').value
+    if(!embedSrc){
+        alert("Fields cannot be empty or has no https")
+        return;
+    }
+    //https://www.youtube.com/embed/r_OOdAGhTmk
+    else if(embedSrc.startsWith('https://youtu.be/'))
+        embedSrc = `https://www.youtube.com/embed/${embedSrc.substring(embedSrc.lastIndexOf('/')+1)}`
+    
+    //create the type
+    const node = createElement('iframe')
+    //add a unique id to it
+    node.setAttribute('id',getUniqueId())
+    node.setAttribute('class','article-element common-style embed-default embed-dev-pad')
+    
+    node.src = embedSrc
+    node.onclick = ()=>updateEmbed()    
+    //add css
+    const cssList = getElementById('custom-css-styles-container').querySelectorAll("div")
+    cssList.forEach(item=>{
+        const _id = item.getAttribute('id')
+        const id = _id.substring(_id.lastIndexOf('-')+1)
+        const property = getElementById(`property-${id}`).innerText
+        const value = getElementById(`value-${id}`).value
+        node.style[property] = value.toString();
+    })
+    //add the type to the editor
+    if(getElementById('place-embed-button').getAttribute('data-update') === '0')
+        addToArticle(node)
+    else
+        replaceNode(node)
+    //clear the css container
+    getElementById('custom-css-styles-container').innerHTML = ""
+    showPullDownAndPushUp(false) 
+}
+function updateEmbed(id){
+    //switch Layout
+    getElementById('tag-selector').value = 'embed';
+    updateLayout()
+    //show position controller
+    showPullDownAndPushUp(true)
+    //show update button
+    getElementById('place-embed-button').innerText = 'Update';
+    getElementById('place-embed-button').setAttribute('data-update',id)
+
+    //clear the css
+    getElementById('custom-css-styles-container').innerHTML = ""
+    // access the element
+    const element = getElementById(id)
+    //access the containers
+    getElementById('embed-input').value = element.src
+    // place the values
+    const textStyles = ['width','height','border','margin',
+    'margin-left','margin-right','margin-top','margin-bottom','padding','padding-left',
+    'padding-right','padding-top','padding-bottom','text-decoration','font-style' ]
+    textStyles.forEach(property=>{
+        if(element.style[property])
+            addStyle(property,element.style[property],element.getAttribute('id'))
+    })
+    // show the update button
+    getElementById('cancel-embed-update').style.display = 'inline';
 }

@@ -151,6 +151,39 @@
 
 
 
+        <!-- embed type -->
+        <div class="controls embed-control" id="embed-type-style-control">
+            <h4 class="tooltip">Please click on the yellow area of the item to enable update</h4>
+            <input placeholder="Enter embed source here" class="embed-input" id="embed-input">
+            <div class="custom-css-container">
+                <div>
+                    <label for="css-styles">Choose a style:</label>
+                    <select name="css-styles" id="embed-css-styles">
+                        <option value="width">width</option>
+                        <option value="height">height</option>
+                        <option value="border">border</option>
+                        <option value="margin-left">margin-left</option>
+                        <option value="margin-right">margin-right</option>
+                        <option value="margin-top">margin-top</option>
+                        <option value="margin-bottom">margin-bottom</option>
+                        <option value="margin">margin</option>
+                        <option value="padding-left">padding-left</option>
+                        <option value="padding-right">padding-right</option>
+                        <option value="padding-top">padding-top</option>
+                        <option value="padding-bottom">padding-bottom</option>
+                        <option value="padding">padding</option>
+                    </select>
+                    <button onclick="addStyle()">Add Style</button>
+                </div>
+            </div>
+            
+            <button onclick="placeEmbed()" id="place-embed-button" data-update="0">Embed</button>
+            <button id="cancel-embed-update" onclick="cancelUpdate()">Cancel</button>
+        </div>
+
+
+
+
         <div class="custom-css-styles-container" id="custom-css-styles-container">
                     
         </div>

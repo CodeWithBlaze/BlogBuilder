@@ -152,3 +152,16 @@ body{
 #place-link-button{
     margin-top: 15px;
 }
+
+/* embed */
+#cancel-embed-update{
+    display: none;
+}
+.embed-default{
+    width: 100%;
+    background-color: yellow;
+    aspect-ratio: 16/9;
+}
+.embed-dev-pad{
+    padding:15px;
+}
