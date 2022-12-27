@@ -9,6 +9,7 @@ body{
     flex-direction: row;
     justify-content: center;
     box-sizing: border-box;
+    flex-wrap: wrap;
     margin:0px;
     padding: 0px;
     padding-top: 30px;
@@ -164,4 +165,21 @@ body{
 }
 .embed-dev-pad{
     padding:15px;
+}
+
+@media screen and (max-width: 480px) {
+    body{
+        margin:0px;
+        padding:0px;
+        flex-direction:column;
+    }
+    .main-article{
+        width: 100%;
+        margin-bottom: 50px;
+    }
+    .controller{
+        width: 100%;
+        margin-left: 0px;
+        margin-bottom: 30px;
+    }
 }

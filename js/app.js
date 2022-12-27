@@ -10,6 +10,20 @@ function download(){
     // return textFile;
      
 }
+function addOnClickForItems(){
+    const NodeList = getElementById('main-article').querySelectorAll('*');
+    NodeList.forEach(node=>{
+        const tagName = node.tagName.toLowerCase()
+        if(['h1','h2','h3','h4','h5','h6','p','label'].includes(tagName))
+            node.onclick = ()=>updateText(node.id)
+        else if(tagName === 'img')
+            node.onclick = ()=>updateImage(node.id)
+        else if(tagName === 'iframe')
+            node.onclick = ()=>updateEmbed(node.id)
+        else if(tagName === 'a')
+            node.onclick = ()=>updateLink(node.id)
+    })
+}
 function upload(){
     const fileSelector = document.getElementById('myfile');
     fileSelector.addEventListener('change', (event) => {
@@ -18,6 +32,7 @@ function upload(){
         fileReader.onload=function(){
             const fileOutput =fileReader.result;
             getElementById('main-article').innerHTML = fileOutput
+            addOnClickForItems()
         }
         fileReader.readAsText(fileList[0]);
       
@@ -44,7 +59,7 @@ function pushUp(){
 
     if(i!=0){
         const nodeToBeReplaced = NodeList[i];
-        const previousNode = NodeList[i-1];
+        const previousNode = NodeList[parseInt(i) - 1];
         getElementById('main-article').insertBefore(nodeToBeReplaced,previousNode)
     }
 }
@@ -378,7 +393,7 @@ function placeEmbed(){
     node.setAttribute('class','article-element common-style embed-default embed-dev-pad')
     
     node.src = embedSrc
-    node.onclick = ()=>updateEmbed()    
+    node.onclick = ()=>updateEmbed(node.id)    
     //add css
     const cssList = getElementById('custom-css-styles-container').querySelectorAll("div")
     cssList.forEach(item=>{
