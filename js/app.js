@@ -1,3 +1,23 @@
+function readFile(file)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                createOutputFile(allText);
+            }
+        }
+    }
+    rawFile.send(null);
+}
+function exportDoc(){
+    readFile('css/style.css')
+}
 function download(){
     const nodeList = getElementById('main-article')
     var data = new Blob([nodeList.innerHTML], {type: 'text/plain'});
@@ -9,6 +29,36 @@ function download(){
     downloadButton.click()
     // return textFile;
      
+}
+function createOutputFile(css_content){
+    toggleGrid()
+    const base_setting_html_start = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <title>Modify It</title>
+        <style>
+        ${css_content}
+        </style>
+    </head>
+    <body>
+    <article class="main-article" id="main-article">`
+    const base_setting_html_end = `
+    </article>
+    </body>
+    </html>`
+    const nodeList = getElementById('main-article')
+    var data = new Blob([base_setting_html_start,nodeList.innerHTML,base_setting_html_end], {type: 'text/html'});
+    textFile = window.URL.createObjectURL(data);
+    // returns a URL you can use as a href
+    const downloadButton = document.createElement('a')
+    downloadButton.href = textFile;
+    downloadButton.setAttribute('download','document.html')
+    downloadButton.click()
 }
 function addOnClickForItems(){
     const NodeList = getElementById('main-article').querySelectorAll('*');

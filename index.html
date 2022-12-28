@@ -18,15 +18,18 @@
     <div class="controller" id="controller">
         <i class="fa-solid fa-download system-icon" onclick="download()"></i>
         <i class="fa-solid fa-upload system-icon" onclick="upload()"></i>
+        <i class="fa-solid fa-file-export system-icon" onclick="exportDoc()"></i>
         <!-- select tag to be inserted -->
-        <label for="tags">Choose a type:</label>
-        <select name="tags" id="tag-selector" onchange="updateLayout()">
-            <option value="text">Text</option>
-            <option value="image">Image</option>
-            <option value="link">Link</option>
-            <option value="embed">Embed</option>
-            <option value="list">List</option>
-        </select>
+        <div class="tags-container">
+            <label for="tags">Choose a type:</label>
+            <select name="tags" id="tag-selector" onchange="updateLayout()">
+                <option value="text">Text</option>
+                <option value="image">Image</option>
+                <option value="link">Link</option>
+                <option value="embed">Embed</option>
+                <option value="list">List</option>
+            </select>
+        </div>
 
 
         <!-- text type -->
